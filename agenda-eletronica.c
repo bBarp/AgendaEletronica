@@ -26,19 +26,19 @@ void consultarContato(){
     Contato contato;
     FILE *arquivo;
 
-    printf("Digite o nome do contato para consultar: ");
+    printf("\nDigite o nome do contato para consultar: ");
     scanf("%s", nomeConsulta);
 
     arquivo = fopen("contatos.bin", "rb");
     if(arquivo == NULL){
-        printf("ERRO: Nao foi possivel abrir o arquivo de contatos.\n");
+        printf("\nERRO: Nao foi possivel abrir o arquivo de contatos.\n");
         return;
     }
 
   // Procura o contato pelo nome dentro do arquivo
     while(fread(&contato, sizeof(Contato), 1, arquivo)){
         if(strcmp(contato.nome, nomeConsulta) == 0){
-            printf("Nome: %s\nTelefone: %s\n\n", contato.nome, contato.telefone);
+            printf("\nNome: %s\nTelefone: %s\n\n", contato.nome, contato.telefone);
             fclose(arquivo);
             return;
         }
@@ -46,6 +46,7 @@ void consultarContato(){
     
     fclose(arquivo);
     printf("\nCONTATO NAO ENCONTRADO.\n");
+    printf("-----------------------\n");
 }
 
 // Função para adicionar um contato
@@ -55,11 +56,11 @@ void adicionarContato(){
 
     arquivo = fopen("contatos.bin", "ab");
     if(arquivo == NULL){
-        printf("ERRO: Nao foi possivel abrir o arquivo de contatos.\n");
+        printf("\nERRO: Nao foi possivel abrir o arquivo de contatos.\n");
         return;
     }
 
-    printf("Nome: ");
+    printf("\nNome: ");
     scanf("%s", novoContato.nome);
 
     printf("Telefone: ");
@@ -70,6 +71,7 @@ void adicionarContato(){
     fclose(arquivo);
 
     printf("\nCONTATO ADICIONADO COM SUCESSO.\n");
+    printf("-------------------------------\n");
 }
 
 // Função para excluir um contato
@@ -78,18 +80,18 @@ void excluirContato(){
     Contato contato;
     FILE *arquivo, *temporario;
 
-    printf("Digite o nome do contato que deseja excluir: ");
+    printf("\nDigite o nome do contato que deseja excluir: ");
     scanf("%s", nomeExcluir);
 
     arquivo = fopen("contatos.bin", "rb");
     if(arquivo == NULL){
-        printf("ERRO: Nao foi possivel abrir o arquivo de contatos.\n");
+        printf("\nERRO: Nao foi possivel abrir o arquivo de contatos.\n");
         return;
     }
 
     temporario = fopen("temp.bin", "wb");
     if(temporario == NULL){
-        printf("ERRO: Nao foi possivel criar arquivo temporario.\n");
+        printf("\nERRO: Nao foi possivel criar arquivo temporario.\n");
         fclose(arquivo);
         return;
     }
@@ -98,14 +100,16 @@ void excluirContato(){
     while(fread(&contato, sizeof(Contato), 1, arquivo)){
         if(strcmp(contato.nome, nomeExcluir) == 0){
             encontrado = 1;
-            printf("Nome: %s\nTelefone: %s\n", contato.nome, contato.telefone);
+            printf("\nNome: %s\nTelefone: %s\n", contato.nome, contato.telefone);
             int confirmacao;
-            printf("Tem certeza que deseja excluir esse contato?\n 1. Sim\n 2. Nao\n");
+            printf("\nTem certeza que deseja excluir esse contato?\n 1. Sim\n 2. Nao\n");
             scanf("%d", &confirmacao);
             if(confirmacao == 1){
                 printf("\nCONTATO EXCLUIDO.\n");
+                printf("-----------------\n");
             }else{
                 printf("\nOPERACAO CANCELADA.\n");
+                printf("-------------------\n");
                 fwrite(&contato, sizeof(Contato), 1, temporario);
             }
         }else{
@@ -118,6 +122,7 @@ void excluirContato(){
 
     if(!encontrado){
         printf(" \nCONTATO NAO ENCONTRADO.\n");
+        printf("------------------------\n");
     }
 
     remove("contatos.bin"); // Remove o arquivo original
@@ -145,6 +150,7 @@ int main(){
                 break;
             default:
                 printf("\nOPCAO INVALIDA.\n");
+                printf("---------------\n");
                 break;
         }
     }while(escolha != 4);
