@@ -3,13 +3,13 @@
 #include <string.h>
 
 // Definição da estrutura do contato
-typedef struct {
+typedef struct{
     char nome[50];
     char telefone[13];
-} Contato;
+}Contato;
 
 // Função para exibir o menu
-int exibirMenu() {
+int exibirMenu(){
     int opcao;
     printf("\nEscolha uma opcao:\n");
     printf("1. Consultar Contato\n");
@@ -21,7 +21,7 @@ int exibirMenu() {
 }
 
 // Função para consultar um contato
-void consultarContato() {
+void consultarContato(){
     char nomeConsulta[50];
     Contato contato;
     FILE *arquivo;
@@ -30,14 +30,14 @@ void consultarContato() {
     scanf("%s", nomeConsulta);
 
     arquivo = fopen("contatos.bin", "rb");
-    if (arquivo == NULL) {
+    if(arquivo == NULL){
         printf("ERRO: Nao foi possivel abrir o arquivo de contatos.\n");
         return;
     }
 
   // Procura o contato pelo nome dentro do arquivo
-    while (fread(&contato, sizeof(Contato), 1, arquivo)) {
-        if (strcmp(contato.nome, nomeConsulta) == 0) {
+    while(fread(&contato, sizeof(Contato), 1, arquivo)){
+        if(strcmp(contato.nome, nomeConsulta) == 0){
             printf("Nome: %s\nTelefone: %s\n\n", contato.nome, contato.telefone);
             fclose(arquivo);
             return;
@@ -49,12 +49,12 @@ void consultarContato() {
 }
 
 // Função para adicionar um contato
-void adicionarContato() {
+void adicionarContato(){
     Contato novoContato;
     FILE *arquivo;
 
     arquivo = fopen("contatos.bin", "ab");
-    if (arquivo == NULL) {
+    if(arquivo == NULL){
         printf("ERRO: Nao foi possivel abrir o arquivo de contatos.\n");
         return;
     }
@@ -73,7 +73,7 @@ void adicionarContato() {
 }
 
 // Função para excluir um contato
-void excluirContato() {
+void excluirContato(){
     char nomeExcluir[50];
     Contato contato;
     FILE *arquivo, *temporario;
@@ -82,33 +82,33 @@ void excluirContato() {
     scanf("%s", nomeExcluir);
 
     arquivo = fopen("contatos.bin", "rb");
-    if (arquivo == NULL) {
+    if(arquivo == NULL){
         printf("ERRO: Nao foi possivel abrir o arquivo de contatos.\n");
         return;
     }
 
     temporario = fopen("temp.bin", "wb");
-    if (temporario == NULL) {
+    if(temporario == NULL){
         printf("ERRO: Nao foi possivel criar arquivo temporario.\n");
         fclose(arquivo);
         return;
     }
 
     int encontrado = 0;
-    while (fread(&contato, sizeof(Contato), 1, arquivo)) {
-        if (strcmp(contato.nome, nomeExcluir) == 0) {
+    while(fread(&contato, sizeof(Contato), 1, arquivo)){
+        if(strcmp(contato.nome, nomeExcluir) == 0){
             encontrado = 1;
             printf("Nome: %s\nTelefone: %s\n", contato.nome, contato.telefone);
             int confirmacao;
             printf("Tem certeza que deseja excluir esse contato?\n 1. Sim\n 2. Nao\n");
             scanf("%d", &confirmacao);
-            if (confirmacao == 1) {
+            if(confirmacao == 1){
                 printf("\nCONTATO EXCLUIDO.\n");
-            } else {
+            }else{
                 printf("\nOPERACAO CANCELADA.\n");
                 fwrite(&contato, sizeof(Contato), 1, temporario);
             }
-        } else {
+        }else{
             fwrite(&contato, sizeof(Contato), 1, temporario);
         }
     }
@@ -116,7 +116,7 @@ void excluirContato() {
     fclose(arquivo);
     fclose(temporario);
 
-    if (!encontrado) {
+    if(!encontrado){
         printf(" \nCONTATO NAO ENCONTRADO.\n");
     }
 
@@ -125,12 +125,12 @@ void excluirContato() {
 }
 
 // Função principal
-int main() {
+int main(){
     int escolha;
 // Looping que exibe o menu
-    do {
+    do{
         escolha = exibirMenu();
-        switch (escolha) {
+        switch(escolha){
             case 1:
                 consultarContato();
                 break;
@@ -147,7 +147,7 @@ int main() {
                 printf("\nOPCAO INVALIDA.\n");
                 break;
         }
-    } while (escolha != 4);
+    }while(escolha != 4);
 
     return 0;
 }
